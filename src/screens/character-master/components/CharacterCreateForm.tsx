@@ -5,6 +5,7 @@ import AppButton from '../../../components/button/button';
 import SpriteUpload from '../../../components/upload/sprite-upload';
 import type { Character } from '../types/Character';
 import { CharacterTypeList, CharacterClassificationList } from '../enums/characterEnums';
+import { HEALTH_MIN, HEALTH_MAX, STAT_MIN, STAT_MAX } from '../enums/statLimits';
 
 const { Option } = Select;
 
@@ -76,23 +77,59 @@ const CharacterCreateForm: React.FC<Props> = ({ visible, onCancel, onCreate }) =
         >
           <SpriteUpload onUploadSuccess={(path) => setSpritePath(path)} />
         </Form.Item>
-        <Form.Item name="baseHealth" label="Base Health" rules={[{ required: true }]} initialValue={100}>
-          <InputNumber min={0} style={{ width: '100%' }} />
+        <Form.Item
+          name="baseHealth"
+          label="Base Health"
+          rules={[{ required: true }]}
+          initialValue={100}
+          help={`Value must be between ${HEALTH_MIN} and ${HEALTH_MAX}`}
+        >
+          <InputNumber min={HEALTH_MIN} max={HEALTH_MAX} style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item name="baseAttack" label="Base Attack" rules={[{ required: true }]} initialValue={10}>
-          <InputNumber min={0} style={{ width: '100%' }} />
+        <Form.Item
+          name="baseAttack"
+          label="Base Attack"
+          rules={[{ required: true }]}
+          initialValue={10}
+          help={`Value must be between ${STAT_MIN} and ${STAT_MAX}`}
+        >
+          <InputNumber min={STAT_MIN} max={STAT_MAX} style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item name="baseMagic" label="Base Magic" rules={[{ required: true }]} initialValue={10}>
-          <InputNumber min={0} style={{ width: '100%' }} />
+        <Form.Item
+          name="baseMagic"
+          label="Base Magic"
+          rules={[{ required: true }]}
+          initialValue={10}
+          help={`Value must be between ${STAT_MIN} and ${STAT_MAX}`}
+        >
+          <InputNumber min={STAT_MIN} max={STAT_MAX} style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item name="basePhysicalDefense" label="Base Physical Defense" rules={[{ required: true }]} initialValue={5}>
-          <InputNumber min={0} style={{ width: '100%' }} />
+        <Form.Item
+          name="basePhysicalDefense"
+          label="Base Physical Defense"
+          rules={[{ required: true }]}
+          initialValue={10}
+          help={`Value must be between ${STAT_MIN} and ${STAT_MAX}`}
+        >
+          <InputNumber min={STAT_MIN} max={STAT_MAX} style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item name="baseMagicalDefense" label="Base Magical Defense" rules={[{ required: true }]} initialValue={5}>
-          <InputNumber min={0} style={{ width: '100%' }} />
+        <Form.Item
+          name="baseMagicalDefense"
+          label="Base Magical Defense"
+          rules={[{ required: true }]}
+          initialValue={10}
+          help={`Value must be between ${STAT_MIN} and ${STAT_MAX}`}
+        >
+          <InputNumber min={STAT_MIN} max={STAT_MAX} style={{ width: '100%' }} />
         </Form.Item>
-        <Form.Item name="baseSpeed" label="Base Speed" rules={[{ required: true }]} initialValue={10}>
-          <InputNumber min={0} style={{ width: '100%' }} />
+        <Form.Item
+          name="baseSpeed"
+          label="Base Speed"
+          rules={[{ required: true }]}
+          initialValue={10}
+          help={`Value must be between ${STAT_MIN} and ${STAT_MAX}`}
+        >
+          <InputNumber min={STAT_MIN} max={STAT_MAX} style={{ width: '100%' }} />
         </Form.Item>
       </Form>
     </Modal>
