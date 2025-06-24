@@ -1,25 +1,29 @@
-import React, { useState } from "react";
-import { useCharacters, useCharactersPaginated } from "./hooks/useCharacter";
+import React, { useState, useEffect } from "react";
+import { useSearchFilterCharacters } from "./hooks/useCharacter";
 import CharacterTable from "./components/CharacterTable";
 import CharacterDetailsModal from "./components/CharacterDetailsModal";
+import CharacterSearchFilter from "./components/CharacterSearchFilter";
 import AppButton from "../../components/button/button";
 import CharacterCreateForm from "./components/CharacterCreateForm";
 import CharacterEditModal from "./components/CharacterEditModal";
 import type { Character } from "./types/character";
-
-import { 
+import { Spin } from "antd";
+import {
   createCharacter,
   updateCharacter,
   softDeleteCharacter,
   hardDeleteCharacter 
 } from "./services/characterService";
+import axios from "axios";
 
 const CharacterMaster: React.FC = () => {
-  // const { characters, loading, error } = useCharacters();
   const [showCreate, setShowCreate] = useState(false);
-  const [refresh, setRefresh] = useState(0);
   const [viewCharacter, setViewCharacter] = useState(null);
   const [editCharacter, setEditCharacter] = useState<Character | null>(null);
+  const [characterTypes, setCharacterTypes] = useState<string[]>([]);
+  const [characterClassifications, setCharacterClassifications] = useState<string[]>([]);
+  const [typesLoading, setTypesLoading] = useState(false);
+
   const {
     characters,
     total,
@@ -28,40 +32,70 @@ const CharacterMaster: React.FC = () => {
     page,
     setPage,
     pageSize,
-  } = useCharactersPaginated(refresh);
+    updateParams,
+    refreshData
+  } = useSearchFilterCharacters();
 
-  // Refetch characters after creation
-  const refetchCharacters = () => setRefresh((r) => r + 1);
+  // Fetch character types and classifications on component mount
+  useEffect(() => {
+    const fetchTypeData = async () => {
+      setTypesLoading(true);
+      try {
+        const [typesRes, classificationsRes] = await Promise.all([
+          axios.get('/api/v1/characters/types'),
+          axios.get('/api/v1/characters/classifications')
+        ]);
+        setCharacterTypes(typesRes.data);
+        setCharacterClassifications(classificationsRes.data);
+      } catch (error) {
+        console.error('Error fetching character types/classifications:', error);
+      } finally {
+        setTypesLoading(false);
+      }
+    };
+
+    fetchTypeData();
+  }, []);
+
+  // Handle search and filter changes
+  const handleSearchFilterChange = (params: any) => {
+    updateParams(params);
+  };
 
   // Handle soft deletion of character
   const handleSoftDelete = async (id: number) => {
     await softDeleteCharacter(id);
     setViewCharacter(null);
-    refetchCharacters();
+    refreshData();
   };
 
   // Handle hard deletion of character
   const handleHardDelete = async (id: number) => {
     await hardDeleteCharacter(id);
     setViewCharacter(null);
-    refetchCharacters();
+    refreshData();
   };
+
+  if (error) {
+    return <div>Error loading characters: {error}</div>;
+  }
 
   return (
     <div>
       <h1>Character Master</h1>
-      <AppButton type="primary" onClick={() => setShowCreate(true)}>
+      <AppButton type="primary" onClick={() => setShowCreate(true)} style={{ marginBottom: 16 }}>
         Create Character
       </AppButton>
-      <CharacterCreateForm
-        visible={showCreate}
-        onCancel={() => setShowCreate(false)}
-        onCreate={async (values) => {
-          await createCharacter(values);
-          setShowCreate(false);
-          refetchCharacters();
-        }}
-      />
+
+      <Spin spinning={typesLoading}>
+        <CharacterSearchFilter
+          loading={loading}
+          onSearch={handleSearchFilterChange}
+          types={characterTypes}
+          classifications={characterClassifications}
+        />
+      </Spin>
+
       <CharacterTable
         characters={characters}
         total={total}
@@ -72,6 +106,17 @@ const CharacterMaster: React.FC = () => {
         onView={setViewCharacter}
         onEdit={setEditCharacter}
       />
+
+      <CharacterCreateForm
+        visible={showCreate}
+        onCancel={() => setShowCreate(false)}
+        onCreate={async (values) => {
+          await createCharacter(values);
+          setShowCreate(false);
+          refreshData();
+        }}
+      />
+
       <CharacterDetailsModal
         visible={!!viewCharacter}
         character={viewCharacter}
@@ -80,6 +125,7 @@ const CharacterMaster: React.FC = () => {
         onHardDelete={handleHardDelete}
         onEdit={setEditCharacter}
       />
+
       <CharacterEditModal
         visible={!!editCharacter}
         character={editCharacter}
@@ -88,7 +134,7 @@ const CharacterMaster: React.FC = () => {
           if (editCharacter) {
             await updateCharacter(editCharacter.id, values);
             setEditCharacter(null);
-            refetchCharacters();
+            refreshData();
           }
         }}
       />

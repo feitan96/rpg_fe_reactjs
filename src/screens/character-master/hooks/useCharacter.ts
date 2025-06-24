@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { getAllCharacters, getCharactersPaginated, type PaginatedResponse } from '../services/characterService';
+import { getAllCharacters, getCharactersPaginated, searchAndFilterCharacters, type PaginatedResponse } from '../services/characterService';
 import type { Character } from '../types/character';
+import type { SearchFilterParams } from '../types/search-filter';
 
 export const useCharacters = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -46,5 +47,73 @@ export const useCharactersPaginated = (refresh: number, pageSize = 10) => {
     page,
     setPage,
     pageSize,
+  };
+};
+
+export const useSearchFilterCharacters = (
+  pageSize = 10,
+  defaultParams: SearchFilterParams = {}
+) => {
+  const [data, setData] = useState<PaginatedResponse<Character> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1); // AntD Table is 1-based
+  const [params, setParams] = useState<SearchFilterParams>(defaultParams);
+  const [refresh, setRefresh] = useState(0);
+
+  // Debounce search to avoid too many API calls
+  const [debouncedParams, setDebouncedParams] = useState(params);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedParams(params);
+    }, 500); // 500ms delay
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [params]);
+
+  useEffect(() => {
+    setLoading(true);
+    const { searchTerm, filter, sortBy = 'id', sortDirection = 'asc' } = debouncedParams;
+
+    searchAndFilterCharacters(
+      searchTerm,
+      filter,
+      page - 1, // Convert to 0-based for backend
+      pageSize,
+      sortBy,
+      sortDirection
+    )
+      .then(setData)
+      .catch((err) => {
+        console.error('Search error:', err);
+        setError('Failed to search characters');
+      })
+      .finally(() => setLoading(false));
+  }, [debouncedParams, page, pageSize, refresh]);
+
+  const updateParams = (newParams: Partial<SearchFilterParams>) => {
+    setParams(prevParams => ({
+      ...prevParams,
+      ...newParams,
+    }));
+    // Reset to first page when filters change
+    setPage(1);
+  };
+
+  const refreshData = () => setRefresh(r => r + 1);
+
+  return {
+    characters: data?.content || [],
+    total: data?.totalElements || 0,
+    loading,
+    error,
+    page,
+    setPage,
+    pageSize,
+    params,
+    updateParams,
+    refreshData,
   };
 };

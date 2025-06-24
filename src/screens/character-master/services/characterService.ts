@@ -60,3 +60,25 @@ export const softDeleteCharacter = async (id: number) => {
 export const hardDeleteCharacter = async (id: number) => {
   await axios.delete(`${API_BASE}/${id}`);
 };
+
+// Search and filter characters with pagination
+export const searchAndFilterCharacters = async (
+  searchTerm?: string,
+  filter?: Partial<Character>,
+  page: number = 0,
+  size: number = 10,
+  sortBy: string = 'id',
+  sortDirection: string = 'asc'
+): Promise<PaginatedResponse<Character>> => {
+  const params = {
+    searchTerm,
+    page,
+    size,
+    sortBy,
+    sortDirection,
+    ...filter
+  };
+
+  const response = await axios.get(`${API_BASE}/search`, { params });
+  return response.data;
+};
