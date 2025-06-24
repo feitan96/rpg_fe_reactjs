@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Select, InputNumber } from 'antd';
 import AppInput from '../../../components/input/input';
 import AppButton from '../../../components/button/button';
+import SpriteUpload from '../../../components/upload/sprite-upload';
 import type { Character } from '../types/character';
+import { CharacterTypeList, CharacterClassificationList } from '../enums/characterEnums';
 
 const { Option } = Select;
 
@@ -15,14 +17,33 @@ interface Props {
 
 const CharacterEditModal: React.FC<Props> = ({ visible, character, onCancel, onSave }) => {
   const [form] = Form.useForm();
+  const [spritePath, setSpritePath] = useState<string>('');
+
+  // Base URL for API requests
+  const apiBaseUrl = process.env.NODE_ENV === 'production'
+    ? ''
+    : 'http://localhost:8081';
 
   useEffect(() => {
     if (character) {
       form.setFieldsValue(character);
+      setSpritePath(character.spritePath || '');
     } else {
       form.resetFields();
+      setSpritePath('');
     }
   }, [character, form]);
+
+  const handleFormSubmit = () => {
+    form.validateFields().then(values => {
+      // Use the new sprite path if one was uploaded, otherwise use the existing path
+      const formData = {
+        ...values,
+        spritePath: spritePath || character?.spritePath || ''
+      };
+      onSave(formData);
+    });
+  };
 
   return (
     <Modal
@@ -34,12 +55,7 @@ const CharacterEditModal: React.FC<Props> = ({ visible, character, onCancel, onS
         <AppButton
           key="submit"
           type="primary"
-          onClick={() => {
-            form.validateFields().then(values => {
-              onSave(values);
-              form.resetFields();
-            });
-          }}
+          onClick={handleFormSubmit}
         >
           Save
         </AppButton>,
@@ -54,15 +70,38 @@ const CharacterEditModal: React.FC<Props> = ({ visible, character, onCancel, onS
         </Form.Item>
         <Form.Item name="type" label="Type" rules={[{ required: true }]}>
           <Select>
-            <Option value="HERO">HERO</Option>
-            <Option value="VILLAIN">VILLAIN</Option>
+            {CharacterTypeList.map(type => (
+              <Option key={type} value={type}>{type}</Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item name="classification" label="Classification" rules={[{ required: true }]}>
-          <AppInput />
+          <Select>
+            {CharacterClassificationList.map(classification => (
+              <Option key={classification} value={classification}>{classification}</Option>
+            ))}
+          </Select>
         </Form.Item>
-        <Form.Item name="spritePath" label="Sprite Path" rules={[{ required: true }]}>
-          <AppInput />
+        <Form.Item
+          label="Character Sprite"
+          help="Upload a new sprite or keep the existing one"
+        >
+          <div style={{ marginBottom: '10px' }}>
+            {character?.spritePath && (
+              <div style={{ marginBottom: '10px', textAlign: 'center' }}>
+                <p>Current Sprite:</p>
+                <img
+                  src={`${apiBaseUrl}${character.spritePath}`}
+                  alt="Current sprite"
+                  style={{ maxWidth: '100%', maxHeight: '150px' }}
+                />
+              </div>
+            )}
+          </div>
+          <SpriteUpload
+            onUploadSuccess={(path) => setSpritePath(path)}
+            characterId={character?.id}
+          />
         </Form.Item>
         <Form.Item name="baseHealth" label="Base Health" rules={[{ required: true }]}>
           <InputNumber min={0} style={{ width: '100%' }} />

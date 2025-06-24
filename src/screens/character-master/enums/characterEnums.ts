@@ -6,11 +6,22 @@ export type CharacterClassification =
   | 'Orc'
   | 'Demon'
   | 'Angel'
-  | 'Monster';
+  | 'Beast'
+  | 'Undead'
+  | 'Elf'
+  | 'Dragon'
+  | 'Goblin'
+  | 'Goblin'
+  | 'Dwarf'
 export const CharacterClassificationList = [
   'Human',
   'Orc',
   'Demon',
   'Angel',
-  'Monster',
+  'Beast',
+    'Undead',
+    'Elf',
+    'Dragon',
+    'Goblin',
+    'Dwarf',
 ] as const;
