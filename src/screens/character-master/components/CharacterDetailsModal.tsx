@@ -1,10 +1,9 @@
 import React from 'react';
-import { Modal, Descriptions, Space, Popconfirm, message } from 'antd';
+import { Modal, Descriptions, Space, Popconfirm, Row, Col } from 'antd';
 import type { Character } from '../types/character';
 import { DeleteOutlined } from '@ant-design/icons';
 import AppButton from '../../../components/button/button';
 import SpritesImage from '../../../components/sprites-image/sprites-image';
-
 
 interface Props {
   visible: boolean;
@@ -15,13 +14,13 @@ interface Props {
   onEdit: (character: Character) => void;
 }
 
-const CharacterDetailsModal: React.FC<Props> = ({ 
+const CharacterDetailsModal: React.FC<Props> = ({
   visible,
   character,
   onClose,
   onSoftDelete,
   onHardDelete,
-  onEdit, 
+  onEdit,
 }) => {
   if (!character) return null;
 
@@ -35,6 +34,7 @@ const CharacterDetailsModal: React.FC<Props> = ({
       open={visible}
       title="Character Details"
       onCancel={onClose}
+      width={800}
       footer={
         <Space>
           <AppButton onClick={() => onEdit(character)}>Edit</AppButton>
@@ -57,30 +57,38 @@ const CharacterDetailsModal: React.FC<Props> = ({
         </Space>
       }
     >
-      {/* Display character sprite if available */}
-      {character.spritePath && (
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <SpritesImage
-            src={`${apiBaseUrl}${character.spritePath}`}
-            alt={`${character.name} sprite`}
-            width={128}
-            height={128}
-          />
-        </div>
-      )}
+      <Row gutter={24}>
+        {/* Left side: Character sprite */}
+        <Col xs={24} sm={10} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {character.spritePath ? (
+            <SpritesImage
+              src={`${apiBaseUrl}${character.spritePath}`}
+              alt={`${character.name} sprite`}
+              width={450}
+              height={450}
+              style={{ objectFit: 'contain' }}
+            />
+          ) : (
+            <div style={{ textAlign: 'center', color: '#999' }}>No sprite available</div>
+          )}
+        </Col>
 
-      <Descriptions bordered column={1}>
-        <Descriptions.Item label="Name">{character.name}</Descriptions.Item>
-        <Descriptions.Item label="Description">{character.description}</Descriptions.Item>
-        <Descriptions.Item label="Type">{character.type}</Descriptions.Item>
-        <Descriptions.Item label="Classification">{character.classification}</Descriptions.Item>
-        <Descriptions.Item label="Base Health">{character.baseHealth}</Descriptions.Item>
-        <Descriptions.Item label="Base Attack">{character.baseAttack}</Descriptions.Item>
-        <Descriptions.Item label="Base Magic">{character.baseMagic}</Descriptions.Item>
-        <Descriptions.Item label="Base Physical Defense">{character.basePhysicalDefense}</Descriptions.Item>
-        <Descriptions.Item label="Base Magical Defense">{character.baseMagicalDefense}</Descriptions.Item>
-        <Descriptions.Item label="Base Speed">{character.baseSpeed}</Descriptions.Item>
-      </Descriptions>
+        {/* Right side: Character details */}
+        <Col xs={24} sm={14}>
+          <Descriptions bordered column={1} size="small" style={{ marginTop: 0 }}>
+            <Descriptions.Item label="Name">{character.name}</Descriptions.Item>
+            <Descriptions.Item label="Description">{character.description}</Descriptions.Item>
+            <Descriptions.Item label="Type">{character.type}</Descriptions.Item>
+            <Descriptions.Item label="Classification">{character.classification}</Descriptions.Item>
+            <Descriptions.Item label="Base Health">{character.baseHealth}</Descriptions.Item>
+            <Descriptions.Item label="Base Attack">{character.baseAttack}</Descriptions.Item>
+            <Descriptions.Item label="Base Magic">{character.baseMagic}</Descriptions.Item>
+            <Descriptions.Item label="Base Physical Defense">{character.basePhysicalDefense}</Descriptions.Item>
+            <Descriptions.Item label="Base Magical Defense">{character.baseMagicalDefense}</Descriptions.Item>
+            <Descriptions.Item label="Base Speed">{character.baseSpeed}</Descriptions.Item>
+          </Descriptions>
+        </Col>
+      </Row>
     </Modal>
   );
 };
