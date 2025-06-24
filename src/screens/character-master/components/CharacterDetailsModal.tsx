@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Descriptions, Space, Popconfirm, Row, Col } from 'antd';
 import type { Character } from '../types/character';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import AppButton from '../../../components/button/button';
 import SpritesImage from '../../../components/sprites-image/sprites-image';
 
@@ -29,6 +29,15 @@ const CharacterDetailsModal: React.FC<Props> = ({
     ? ''
     : 'http://localhost:8081';
 
+  // Handle edit click - close this modal first, then open edit modal
+  const handleEdit = () => {
+    onClose(); // Close the details modal first
+    // Small timeout to allow modal close animation to complete
+    setTimeout(() => {
+      onEdit(character);
+    }, 100);
+  };
+
   return (
     <Modal
       open={visible}
@@ -37,7 +46,7 @@ const CharacterDetailsModal: React.FC<Props> = ({
       width={800}
       footer={
         <Space>
-          <AppButton onClick={() => onEdit(character)}>Edit</AppButton>
+          <AppButton onClick={handleEdit} icon={<EditOutlined />}>Edit</AppButton>
           <Popconfirm
             title="Soft delete this character?"
             onConfirm={() => onSoftDelete(character.id)}
