@@ -1,6 +1,5 @@
 import React from 'react';
-import { Card, Typography, Space, Row, Col } from 'antd';
-import { EyeOutlined, EditOutlined } from '@ant-design/icons';
+import { Card, Typography, Row, Col } from 'antd';
 import type { Character } from '../types/character';
 import SpritesImage from '../../../components/sprites-image/sprites-image';
 
@@ -8,18 +7,18 @@ const { Text } = Typography;
 
 interface Props {
   character: Character;
-  onView: (character: Character) => void;
-  onEdit: (character: Character) => void;
+  onClick: (character: Character) => void;
 }
 
-const CharacterCard: React.FC<Props> = ({ character, onView, onEdit }) => {
+const CharacterCard: React.FC<Props> = ({ character, onClick }) => {
   // Base URL for API requests
   const apiBaseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8081';
 
   return (
     <Card
       hoverable
-      style={{ height: 400, marginBottom: 16 }}
+      style={{ height: 400, marginBottom: 16, cursor: 'pointer' }}
+      onClick={() => onClick(character)}
       cover={
         <div style={{ height: 200, display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#f5f5f5' }}>
           {character.spritePath ? (
@@ -35,10 +34,6 @@ const CharacterCard: React.FC<Props> = ({ character, onView, onEdit }) => {
           )}
         </div>
       }
-      actions={[
-        <EyeOutlined key="view" onClick={() => onView(character)} />,
-        <EditOutlined key="edit" onClick={() => onEdit(character)} />
-      ]}
     >
       <Typography.Title level={5}>{character.name}</Typography.Title>
       <Row gutter={[8, 8]}>

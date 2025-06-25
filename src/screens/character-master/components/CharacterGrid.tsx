@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Pagination, Spin } from 'antd';
+import { Row, Col, Pagination, Spin, Empty } from 'antd';
 import type { Character } from '../types/character';
 import CharacterCard from './CharacterCard';
 
@@ -22,24 +22,33 @@ const CharacterGrid: React.FC<Props> = ({
   loading,
   onPageChange,
   onView,
-  onEdit,
 }) => {
   return (
     <div>
+        <div style={{ marginBottom: 16, fontSize: '14px', color: '#666' }}>
+          Showing {characters.length} of {total} characters
+        </div>
       <Spin spinning={loading}>
-        <Row gutter={[16, 16]}>
-          {characters.map(character => (
-            <Col xs={24} sm={12} md={8} lg={6} xl={4} key={character.id}>
-              <CharacterCard
-                character={character}
-                onView={onView}
-                onEdit={onEdit}
-              />
-            </Col>
-          ))}
-        </Row>
+        {characters.length > 0 ? (
+          <Row gutter={[16, 16]}>
+            {characters.map(character => (
+              <Col xs={24} sm={12} md={8} lg={6} xl={4} key={character.id}>
+                <CharacterCard
+                  character={character}
+                  onClick={onView}
+                />
+              </Col>
+            ))}
+          </Row>
+        ) : (
+          <Empty
+            description="No characters found"
+            style={{ margin: '40px 0' }}
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+          />
+        )}
       </Spin>
-      <div style={{ marginTop: 40, marginBottom: 20, textAlign: 'right' }}>
+      <div style={{ marginTop: 8, paddingBottom: 16, display: 'flex', justifyContent: 'flex-end'}}>
         <Pagination
           current={page}
           pageSize={pageSize}

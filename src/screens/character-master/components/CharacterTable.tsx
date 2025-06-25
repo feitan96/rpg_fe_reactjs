@@ -60,20 +60,25 @@ const CharacterTable: React.FC<Props> = ({
   ];
 
   return (
-    <Table
-      dataSource={characters}
-      columns={columns}
-      rowKey="id"
-      loading={loading}
-      pagination={{
-        current: page,
-        pageSize,
-        total,
-        onChange: onPageChange,
-        showSizeChanger: false,
-      }}
-    />
-  );
+      <>
+        <div style={{ marginBottom: 16, fontSize: '14px', color: '#666' }}>
+          Showing {characters.length} of {total} characters
+        </div>
+        <Table
+          dataSource={characters}
+          columns={columns}
+          rowKey="id"
+          loading={loading}
+          pagination={{
+            current: page,
+            pageSize,
+            total,
+            onChange: onPageChange,
+            showSizeChanger: false,
+          }}
+        />
+      </>
+    )
 };
 
 export default CharacterTable;
