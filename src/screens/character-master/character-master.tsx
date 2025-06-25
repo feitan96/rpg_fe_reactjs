@@ -10,6 +10,7 @@ import CharacterCreateForm from "./components/CharacterCreateForm";
 import CharacterEditModal from "./components/CharacterEditModal";
 import type { Character } from "./types/character";
 import { Spin, Space } from "antd";
+import { PlusOutlined } from '@ant-design/icons';
 import {
   createCharacter,
   updateCharacter,
@@ -88,7 +89,7 @@ const CharacterMaster: React.FC = () => {
       <h1>Character Master</h1>
       <Space style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
         <AppButton type="primary" onClick={() => setShowCreate(true)}>
-          Create Character
+          <PlusOutlined /> Create Character
         </AppButton>
 
         <ViewToggle view={viewMode} onChange={setViewMode} />

@@ -25,8 +25,8 @@ const CharacterCard: React.FC<Props> = ({ character, onClick }) => {
             <SpritesImage
               src={`${apiBaseUrl}${character.spritePath}`}
               alt={`${character.name} sprite`}
-              width={150}
-              height={150}
+              width={200}
+              height={200}
               style={{ objectFit: 'contain' }}
             />
           ) : (
