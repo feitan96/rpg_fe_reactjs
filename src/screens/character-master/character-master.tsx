@@ -86,7 +86,7 @@ const CharacterMaster: React.FC = () => {
 
   return (
     <div>
-      <h1>Character Master</h1>
+      <h1>Bestiary</h1>
       <Space style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
         <AppButton type="primary" onClick={() => setShowCreate(true)}>
           <PlusOutlined /> Create Character
