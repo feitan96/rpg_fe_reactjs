@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Input, Row, Col, Card, Select, Form, Button, Slider, InputNumber, Collapse } from 'antd';
 import { SearchOutlined, FilterOutlined, ClearOutlined } from '@ant-design/icons';
 import type { SearchFilterParams } from '../types/search-filter';
+import { HEALTH_MIN, HEALTH_MAX, STAT_MIN, STAT_MAX, HealthRange, StatRange } from '../enums/statLimits';
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -12,6 +13,16 @@ interface Props {
   types: string[];
   classifications: string[];
 }
+
+// Display names for stats
+const statDisplayNames: Record<string, string> = {
+  'Health': 'Health',
+  'Attack': 'Attack',
+  'Magic': 'Magic',
+  'PhysicalDefense': 'Physical Defense',
+  'MagicalDefense': 'Magical Defense',
+  'Speed': 'Speed'
+};
 
 const CharacterSearchFilter: React.FC<Props> = ({ loading, onSearch, types, classifications }) => {
   const [form] = Form.useForm();
@@ -38,6 +49,7 @@ const CharacterSearchFilter: React.FC<Props> = ({ loading, onSearch, types, clas
 
     const rangeFilters: Record<string, any> = {};
 
+    // Loop through each stat to set min/max filters
     stats.forEach(stat => {
       const min = filters[`min${stat}`];
       const max = filters[`max${stat}`];
@@ -153,16 +165,24 @@ const CharacterSearchFilter: React.FC<Props> = ({ loading, onSearch, types, clas
             <Row gutter={16}>
               {['Health', 'Attack', 'Magic', 'PhysicalDefense', 'MagicalDefense', 'Speed'].map(stat => (
                 <Col xs={24} md={12} lg={8} key={stat}>
-                  <Card size="small" title={`${stat} Range`} style={{ marginBottom: 16 }}>
+                  <Card size="small" title={`${statDisplayNames[stat]} Range`} style={{ marginBottom: 16 }}>
                     <Row gutter={8}>
                       <Col span={12}>
                         <Form.Item name={`min${stat}`} label="Min">
-                          <InputNumber style={{ width: '100%' }} min={0} />
+                          <InputNumber
+                            style={{ width: '100%' }}
+                            min={stat === 'Health' ? HEALTH_MIN : STAT_MIN}
+                            max={stat === 'Health' ? HEALTH_MAX : STAT_MAX}
+                          />
                         </Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item name={`max${stat}`} label="Max">
-                          <InputNumber style={{ width: '100%' }} min={0} />
+                          <InputNumber
+                            style={{ width: '100%' }}
+                            min={stat === 'Health' ? HEALTH_MIN : STAT_MIN}
+                            max={stat === 'Health' ? HEALTH_MAX : STAT_MAX}
+                          />
                         </Form.Item>
                       </Col>
                     </Row>
