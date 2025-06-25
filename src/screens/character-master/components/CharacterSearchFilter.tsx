@@ -121,6 +121,8 @@ const CharacterSearchFilter: React.FC<Props> = ({ loading, onSearch, types, clas
                 <Option value="baseHealth">Health</Option>
                 <Option value="baseAttack">Attack</Option>
                 <Option value="baseMagic">Magic</Option>
+                <Option value="basePhysicalDefense">Physical Defense</Option>
+                <Option value="baseMagicalDefense">Magical Defense</Option>
                 <Option value="baseSpeed">Speed</Option>
               </Select>
             </Form.Item>

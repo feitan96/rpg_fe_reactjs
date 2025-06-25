@@ -25,7 +25,7 @@ export const useCharacters = () => {
 };
 
 
-export const useCharactersPaginated = (refresh: number, pageSize = 10) => {
+export const useCharactersPaginated = (refresh: number, pageSize = 12) => {
   const [data, setData] = useState<PaginatedResponse<Character> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +51,7 @@ export const useCharactersPaginated = (refresh: number, pageSize = 10) => {
 };
 
 export const useSearchFilterCharacters = (
-  pageSize = 10,
+  pageSize = 12,
   defaultParams: SearchFilterParams = {}
 ) => {
   const [data, setData] = useState<PaginatedResponse<Character> | null>(null);
