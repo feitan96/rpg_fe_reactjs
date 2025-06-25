@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useSearchFilterCharacters } from "./hooks/useCharacter";
 import CharacterTable from "./components/CharacterTable";
+import CharacterGrid from "./components/CharacterGrid";
 import CharacterDetailsModal from "./components/CharacterDetailsModal";
 import CharacterSearchFilter from "./components/CharacterSearchFilter";
 import AppButton from "../../components/button/button";
+import ViewToggle from "../../components/view-toggle/view-toggle";
 import CharacterCreateForm from "./components/CharacterCreateForm";
 import CharacterEditModal from "./components/CharacterEditModal";
 import type { Character } from "./types/character";
-import { Spin } from "antd";
+import { Spin, Space } from "antd";
 import {
   createCharacter,
   updateCharacter,
   softDeleteCharacter,
-  hardDeleteCharacter 
+  hardDeleteCharacter
 } from "./services/characterService";
 import axios from "axios";
 
 const CharacterMaster: React.FC = () => {
+  const [viewMode, setViewMode] = useState<'table' | 'card'>('table');
   const [showCreate, setShowCreate] = useState(false);
   const [viewCharacter, setViewCharacter] = useState(null);
   const [editCharacter, setEditCharacter] = useState<Character | null>(null);
@@ -83,9 +86,13 @@ const CharacterMaster: React.FC = () => {
   return (
     <div>
       <h1>Character Master</h1>
-      <AppButton type="primary" onClick={() => setShowCreate(true)} style={{ marginBottom: 16 }}>
-        Create Character
-      </AppButton>
+      <Space style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
+        <AppButton type="primary" onClick={() => setShowCreate(true)}>
+          Create Character
+        </AppButton>
+
+        <ViewToggle view={viewMode} onChange={setViewMode} />
+      </Space>
 
       <Spin spinning={typesLoading}>
         <CharacterSearchFilter
@@ -96,16 +103,29 @@ const CharacterMaster: React.FC = () => {
         />
       </Spin>
 
-      <CharacterTable
-        characters={characters}
-        total={total}
-        page={page}
-        pageSize={pageSize}
-        loading={loading}
-        onPageChange={setPage}
-        onView={setViewCharacter}
-        onEdit={setEditCharacter}
-      />
+      {viewMode === 'table' ? (
+        <CharacterTable
+          characters={characters}
+          total={total}
+          page={page}
+          pageSize={pageSize}
+          loading={loading}
+          onPageChange={setPage}
+          onView={setViewCharacter}
+          onEdit={setEditCharacter}
+        />
+      ) : (
+        <CharacterGrid
+          characters={characters}
+          total={total}
+          page={page}
+          pageSize={pageSize}
+          loading={loading}
+          onPageChange={setPage}
+          onView={setViewCharacter}
+          onEdit={setEditCharacter}
+        />
+      )}
 
       <CharacterCreateForm
         visible={showCreate}

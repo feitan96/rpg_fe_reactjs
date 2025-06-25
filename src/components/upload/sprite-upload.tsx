@@ -81,14 +81,18 @@ const SpriteUpload: React.FC<SpriteUploadProps> = ({
         if (characterId) {
           // When updating character sprite directly, get the path from the response
           filePath = data.spritePath;
+          // Ensure it doesn't have the base URL
+          if (filePath && filePath.startsWith(apiBaseUrl)) {
+            filePath = filePath.substring(apiBaseUrl.length);
+          }
         } else {
-          // When using the generic file upload endpoint, extract just the filename part
-          // e.g., convert "http://localhost:8081/api/v1/files/filename.svg" to "/uploads/filename.svg"
+          // When using the generic file upload endpoint
           const fileUrl = data.fileUrl;
           const fileName = fileUrl.split('/').pop();
           filePath = `/uploads/${fileName}`;
         }
 
+        // Passes only the relative path to parent component
         onUploadSuccess(filePath);
 
         // Create a preview URL
