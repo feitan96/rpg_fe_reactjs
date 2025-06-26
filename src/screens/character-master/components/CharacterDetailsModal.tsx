@@ -24,15 +24,11 @@ const CharacterDetailsModal: React.FC<Props> = ({
 }) => {
   if (!character) return null;
 
-  // Base URL for API requests
-  const apiBaseUrl = process.env.NODE_ENV === 'production'
-    ? ''
-    : 'http://localhost:8081';
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
 
   // Handle edit click - close this modal first, then open edit modal
   const handleEdit = () => {
-    onClose(); // Close the details modal first
-    // Small timeout to allow modal close animation to complete
+    onClose();
     setTimeout(() => {
       onEdit(character);
     }, 100);

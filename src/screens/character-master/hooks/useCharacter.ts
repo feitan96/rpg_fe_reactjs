@@ -29,7 +29,7 @@ export const useCharactersPaginated = (refresh: number, pageSize = 12) => {
   const [data, setData] = useState<PaginatedResponse<Character> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1); // AntD Table is 1-based
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     setLoading(true);
@@ -57,16 +57,15 @@ export const useSearchFilterCharacters = (
   const [data, setData] = useState<PaginatedResponse<Character> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1); // AntD Table is 1-based
+  const [page, setPage] = useState(1);
   const [params, setParams] = useState<SearchFilterParams>(defaultParams);
   const [refresh, setRefresh] = useState(0);
 
-  // Debounce search to avoid too many API calls
   const [debouncedParams, setDebouncedParams] = useState(params);
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedParams(params);
-    }, 500); // 500ms delay
+    }, 500);
 
     return () => {
       clearTimeout(handler);
@@ -80,7 +79,7 @@ export const useSearchFilterCharacters = (
     searchAndFilterCharacters(
       searchTerm,
       filter,
-      page - 1, // Convert to 0-based for backend
+      page - 1,
       pageSize,
       sortBy,
       sortDirection
@@ -98,7 +97,7 @@ export const useSearchFilterCharacters = (
       ...prevParams,
       ...newParams,
     }));
-    // Reset to first page when filters change
+
     setPage(1);
   };
 

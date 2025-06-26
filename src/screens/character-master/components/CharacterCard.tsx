@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Typography, Row, Col } from 'antd';
 import type { Character } from '../types/character';
 import SpritesImage from '../../../components/sprites-image/sprites-image';
+import brownBg from '../../../assets/brown_bg.jpg';
 
 const { Text } = Typography;
 
@@ -12,7 +13,7 @@ interface Props {
 
 const CharacterCard: React.FC<Props> = ({ character, onClick }) => {
   // Base URL for API requests
-  const apiBaseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8081';
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
 
   return (
     <Card
@@ -20,7 +21,17 @@ const CharacterCard: React.FC<Props> = ({ character, onClick }) => {
       style={{ height: 400, marginBottom: 16, cursor: 'pointer' }}
       onClick={() => onClick(character)}
       cover={
-        <div style={{ height: 200, display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#f5f5f5' }}>
+        <div
+          style={{
+            height: 200,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundImage: `url(${brownBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
           {character.spritePath ? (
             <SpritesImage
               src={`${apiBaseUrl}${character.spritePath}`}

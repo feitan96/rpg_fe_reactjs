@@ -18,11 +18,12 @@ import {
   hardDeleteCharacter
 } from "./services/characterService";
 import axios from "axios";
+import type { SearchFilterParams } from "./types/search-filter";
 
 const CharacterMaster: React.FC = () => {
   const [viewMode, setViewMode] = useState<'table' | 'card'>('table');
   const [showCreate, setShowCreate] = useState(false);
-  const [viewCharacter, setViewCharacter] = useState(null);
+  const [viewCharacter, setViewCharacter] = useState<Character | null>(null);
   const [editCharacter, setEditCharacter] = useState<Character | null>(null);
   const [characterTypes, setCharacterTypes] = useState<string[]>([]);
   const [characterClassifications, setCharacterClassifications] = useState<string[]>([]);
@@ -62,7 +63,7 @@ const CharacterMaster: React.FC = () => {
   }, []);
 
   // Handle search and filter changes
-  const handleSearchFilterChange = (params: any) => {
+  const handleSearchFilterChange = (params: Partial<SearchFilterParams>) => {
     updateParams(params);
   };
 
@@ -112,7 +113,7 @@ const CharacterMaster: React.FC = () => {
           pageSize={pageSize}
           loading={loading}
           onPageChange={setPage}
-          onView={setViewCharacter}
+          onView={(character: Character) => setViewCharacter(character)}
           onEdit={setEditCharacter}
         />
       ) : (

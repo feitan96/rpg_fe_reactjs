@@ -22,9 +22,7 @@ const CharacterEditModal: React.FC<Props> = ({ visible, character, onCancel, onS
   const [spritePath, setSpritePath] = useState<string>('');
 
   // Base URL for API requests
-  const apiBaseUrl = process.env.NODE_ENV === 'production'
-    ? ''
-    : 'http://localhost:8081';
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
 
   useEffect(() => {
     if (character) {

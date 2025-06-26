@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Input, Row, Col, Card, Select, Form, Button, Slider, InputNumber, Collapse } from 'antd';
+import { Input, Row, Col, Card, Select, Form, Button, InputNumber, Collapse } from 'antd';
 import { SearchOutlined, FilterOutlined, ClearOutlined } from '@ant-design/icons';
 import type { SearchFilterParams } from '../types/search-filter';
-import { HEALTH_MIN, HEALTH_MAX, STAT_MIN, STAT_MAX, HealthRange, StatRange } from '../enums/statLimits';
+import { HEALTH_MIN, HEALTH_MAX, STAT_MIN, STAT_MAX} from '../enums/statLimits';
 
 const { Panel } = Collapse;
 const { Option } = Select;

@@ -3,7 +3,7 @@ import { Modal, Form, Select, InputNumber, Row, Col } from 'antd';
 import AppInput from '../../../components/input/input';
 import AppButton from '../../../components/button/button';
 import SpriteUpload from '../../../components/upload/sprite-upload';
-import type { Character } from '../types/Character';
+import type { Character } from '../types/character';
 import { CharacterTypeList, CharacterClassificationList } from '../enums/characterEnums';
 import { HEALTH_MIN, HEALTH_MAX, STAT_MIN, STAT_MAX } from '../enums/statLimits';
 

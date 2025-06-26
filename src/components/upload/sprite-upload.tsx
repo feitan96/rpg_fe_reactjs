@@ -20,7 +20,7 @@ const SpriteUpload: React.FC<SpriteUploadProps> = ({
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(defaultImageUrl);
 
   // Base URL for API requests
-  const apiBaseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8081';
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
 
   const uploadProps: UploadProps = {
     accept: '.svg',
