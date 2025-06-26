@@ -1,3 +1,4 @@
+// This file defines the types for the search filter functionality in the character master screen.
 export interface SearchFilterParams {
   searchTerm?: string;
   filter?: {

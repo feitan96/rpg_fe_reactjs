@@ -2,6 +2,7 @@ import React from 'react';
 import type { Character } from '../types/character';
 import { EyeOutlined, EditOutlined } from '@ant-design/icons';
 import { Tooltip, Button, Table } from 'antd';
+import styles from './CharacterStyles.module.css';
 
 interface Props {
   characters: Character[];
@@ -61,7 +62,7 @@ const CharacterTable: React.FC<Props> = ({
 
   return (
       <>
-        <div style={{ marginBottom: 16, fontSize: '14px', color: '#666' }}>
+        <div className={styles.infoText}>
           Showing {characters.length} of {total} characters
         </div>
         <Table

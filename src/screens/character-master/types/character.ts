@@ -1,3 +1,4 @@
+// This file defines the TypeScript interface for a character in the game.
 export interface Character {
   id: number;
   name: string;

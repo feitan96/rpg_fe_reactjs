@@ -4,6 +4,7 @@ import type { Character } from '../types/character';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import AppButton from '../../../components/button/button';
 import SpritesImage from '../../../components/sprites-image/sprites-image';
+import styles from './CharacterStyles.module.css';
 
 interface Props {
   visible: boolean;
@@ -74,7 +75,7 @@ const CharacterDetailsModal: React.FC<Props> = ({
               style={{ objectFit: 'contain' }}
             />
           ) : (
-            <div style={{ textAlign: 'center', color: '#999' }}>No sprite available</div>
+            <div className={styles.detailsNoSprite}>No sprite available</div>
           )}
         </Col>
 

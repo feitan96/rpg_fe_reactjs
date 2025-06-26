@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Pagination, Spin, Empty } from 'antd';
 import type { Character } from '../types/character';
 import CharacterCard from './CharacterCard';
+import styles from './CharacterStyles.module.css';
 
 interface Props {
   characters: Character[];
@@ -25,9 +26,9 @@ const CharacterGrid: React.FC<Props> = ({
 }) => {
   return (
     <div>
-        <div style={{ marginBottom: 16, fontSize: '14px', color: '#666' }}>
-          Showing {characters.length} of {total} characters
-        </div>
+      <div className={styles.infoText}>
+        Showing {characters.length} of {total} characters
+      </div>
       <Spin spinning={loading}>
         {characters.length > 0 ? (
           <Row gutter={[16, 16]}>
@@ -48,7 +49,7 @@ const CharacterGrid: React.FC<Props> = ({
           />
         )}
       </Spin>
-      <div style={{ marginTop: 8, paddingBottom: 16, display: 'flex', justifyContent: 'flex-end'}}>
+      <div className={styles.paginationContainer}>
         <Pagination
           current={page}
           pageSize={pageSize}

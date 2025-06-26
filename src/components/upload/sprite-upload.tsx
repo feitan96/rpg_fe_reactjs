@@ -3,6 +3,7 @@ import { Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import type { UploadProps, UploadFile } from 'antd';
 import AppButton from '../button/button';
+import styles from '../../../src/screens/character-master/components/CharacterStyles.module.css'
 
 interface SpriteUploadProps {
   onUploadSuccess: (filePath: string) => void;
@@ -102,6 +103,7 @@ const SpriteUpload: React.FC<SpriteUploadProps> = ({
         if (onSuccess) {
           onSuccess({});
         }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         message.error('Sprite upload failed');
         if (onError) {
@@ -126,7 +128,7 @@ const SpriteUpload: React.FC<SpriteUploadProps> = ({
           <img
             src={previewUrl}
             alt="Sprite Preview"
-            style={{ maxWidth: '100%', maxHeight: '200px' }}
+            className={styles.spritePreview}
           />
         </div>
       )}

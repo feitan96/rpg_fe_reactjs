@@ -1,0 +1,42 @@
+
+.infoText {
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #666;
+}
+
+.cardCover {
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+}
+
+.cardNoSprite {
+  text-align: center;
+  color: #999;
+}
+
+.spritePreview {
+  max-width: 100%;
+  max-height: 200px;
+}
+
+.spriteModalImage {
+  max-width: 100%;
+  max-height: 150px;
+}
+
+.detailsNoSprite {
+  text-align: center;
+  color: #999;
+}
+
+.paginationContainer {
+  margin-top: 8px;
+  padding-bottom: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
