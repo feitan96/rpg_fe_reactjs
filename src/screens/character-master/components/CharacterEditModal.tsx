@@ -63,12 +63,18 @@ const CharacterEditModal: React.FC<Props> = ({ visible, character, onCancel, onS
       ]}
     >
       <Form form={form} layout="vertical">
-        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-          <AppInput />
+        <Form.Item name="name" label="Name" rules={[
+          { required: true },
+          { max: 50, message: 'Name cannot exceed 50 characters' }
+        ]}>
+          <AppInput maxLength={50} showCount />
         </Form.Item>
 
-        <Form.Item name="description" label="Description" rules={[{ required: true }]}>
-          <TextArea rows={4} />
+        <Form.Item name="description" label="Description" rules={[
+          { required: true },
+          { max: 256, message: 'Description cannot exceed 256 characters' }
+        ]}>
+          <TextArea rows={4} maxLength={256} showCount />
         </Form.Item>
 
         {/* Type and Classification side by side */}
